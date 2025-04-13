@@ -29,3 +29,30 @@
   - 하이버네이트에 존재, 초기화 => 객체를 생성하고 프록시와 연결한다.
 - 참고: JPA 표준은 강제 초기화 없음
   - 강제 호출: member.getName()
+
+
+## 즉시로딩과 지연로딩 ##
+### (fetch = FetchType.EAGER)
+- JPA 구현체는 가능하면 조인을 사용해서 SQL 한번에 함께 조회
+
+- 프록시와 즉시로딩 주의
+  - 가급적 지연 로딩만 사용(특히 실무에서)
+  - 즉시 로딩을 적용하면 예상하지 못한 SQL이 발생
+  - 즉시 로딩은 JPQL에서 N+1 문제를 일으킨다.
+  - @ManyToOne, @OneToOne은 기본이 즉시 로딩
+    - -> LAZY로 설정
+  - @OneToMany, @ManyToMany는 기본이 지연 로딩
+
+### (fetch = FetchType.LAZY)
+- Column에 해당하는 객체를 프록시로 생성
+- 그 객체를 조회할 때, 객체를 생성하고 프록시와 연결
+  - Member member = em.find(Member.class, 1L);
+  - Team team = member.getTeam();
+  - team.getName(); // 실제 team을 사용하는 시점에 초기화(DB 조회)
+
+- 지연 로딩 활용 - 실무
+  - 모든 연관관계에 지연 로딩을 사용해라!
+  - 실무에서 즉시 로딩을 사용하지 마라!
+  - JPQL fetch 조인이나, 엔티티 그래프 기능을 사용해라!(뒤에서 설명)
+  - 즉시 로딩은 상상하지 못한 쿼리가 나간다.
+
