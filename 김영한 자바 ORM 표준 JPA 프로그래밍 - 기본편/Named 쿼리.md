@@ -7,6 +7,7 @@
   - 해당 쿼리를 스캔하고 캐싱한 상태로 진행
    
 ```java
+//이건 잘 사용안하고 Spring Data JPA @Query로 자주 사용
 @Entity
 @NamedQuery(
        name = "Member.findByUsername",
