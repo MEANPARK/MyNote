@@ -19,6 +19,10 @@ List<Member> resultList =
 em.createNamedQuery("Member.findByUsername", Member.class)
     .setParameter("username", "회원1")
     .getResultList();
+
+//Spring Data JPA
+@Query("select u from User u where u.emailAddress = ?1")
+User findByEmailAddress(String emailAddress);
 ```
 
 ##
